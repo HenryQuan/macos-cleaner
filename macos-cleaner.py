@@ -4,7 +4,7 @@ import re, glob
 max_depth = 5
 
 def usage():
-    print('usage: python3 macos-cleaner <path> [-y|--yes]\nmacos-cleaner will remove all .DS_Store and ._* files for all subdirectories')
+    print('usage: python3 macos-cleaner <path> [-y|--yes]\nmacos-cleaner will remove all .DS_Store and ._* files for all subdirectories\nRepo: https://github.com/HenryQuan/macos-cleaner')
 
 def main():
     length: int = len(sys.argv)
