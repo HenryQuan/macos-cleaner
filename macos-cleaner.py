@@ -2,6 +2,7 @@ import sys, os
 import re, glob
 
 max_depth = 5
+delete_mode = False
 
 def usage():
     print('usage: python3 macos-cleaner <path> [-y|--yes]\nmacos-cleaner will remove all .DS_Store and ._* files for all subdirectories\nRepo: https://github.com/HenryQuan/macos-cleaner')
@@ -44,8 +45,11 @@ def clean(path: str, depth: int):
         for f in glob.glob(temp_file):
             regex = re.compile('\._.*$')
             if f.endswith('.DS_Store') or regex.search(f):
-                os.remove(f)
-                print('{} was removed'.format(f))
+                if delete_mode:
+                    os.remove(f)
+                    print('{} was removed'.format(f))
+                else:
+                    print('{} could be removed'.format(f))
                 curr_count += 1
         
         # go deeper
