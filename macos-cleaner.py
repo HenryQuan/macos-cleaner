@@ -1,7 +1,7 @@
 import sys, os
 import re, glob
 
-max_depth = 999
+max_depth = 10
 delete_mode = True
 
 def usage():
@@ -41,26 +41,30 @@ def clean(path: str, depth: int):
         directory = os.path.join(path, '*')
         temp_file = os.path.join(path, '.*')
 
-        # find files to remove
-        for f in glob.glob(temp_file):
-            regex = re.compile('\._.*$')
-            if f.endswith('.DS_Store') or regex.search(f):
-                if delete_mode:
-                    try:
-                        os.remove(f)
-                        print('{} was removed'.format(f))
-                    except Exception as ex:
-                        print('{} wasn''t removed'.format(f))
-                else:
-                    print('{} could be removed'.format(f))
-                curr_count += 1
-        
-        # go deeper
-        for d in glob.glob(directory):
-            if os.path.isdir(d):
-                new_path = os.path.join(path, d)
-                curr_count += clean(new_path, depth + 1)
-                
+        try:
+            # find files to remove
+            for f in glob.glob(temp_file):
+                regex = re.compile('\._.*$')
+                if f.endswith('.DS_Store') or regex.search(f):
+                    if delete_mode:
+                        try:
+                            os.remove(f)
+                            print('Removed {}'.format(f))
+                        except Exception as ex:
+                            print('Failed to remove {}'.format(f))
+                    else:
+                        print('To remove: {}'.format(f))
+                    curr_count += 1
+            
+            # go deeper
+            for d in glob.glob(directory):
+                if os.path.isdir(d):
+                    new_path = os.path.join(path, d)
+                    curr_count += clean(new_path, depth + 1)
+                    
+        except Exception as ex:
+            print(ex, path)
+       
         return curr_count
     else:
         print('{} does not exists'.format(path))
